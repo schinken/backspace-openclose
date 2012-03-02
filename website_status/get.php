@@ -10,6 +10,9 @@ define('BCKSPC_IMG_UNKNOWN',    'status_unknown.png');
 define('BCKSPC_APC_NAME',       'bckspc_status_cache');
 define('BCKSPC_APC_TIME',       300 );
 
+/**
+* Retrieve content from URL
+*/
 
 function curlStatus( $URL ) {
 
@@ -23,7 +26,7 @@ function curlStatus( $URL ) {
     $Return = curl_exec( $ch );
 
     if( curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200 ) {
-        return false;
+        throw new Exception('Unable to retrieve status');
     }
 
     return $Return;
@@ -33,11 +36,18 @@ function curlStatus( $URL ) {
 function retrieveStatus() {
 
     $Members = 0;
-    $Result = curlStatus( BCKSPC_URL );
 
-    if( $Result === false ) {
-        $Image = BCKSPC_IMG_UNKNOWN;
-    } else {
+    try {
+
+        // retrieve data from backspace URL
+        $Result = curlStatus( BCKSPC_URL );
+
+        // try to decode json
+        // default format is:
+        //    all: int
+        //    members: int
+        //    member_devices: int
+        //    unknown_devices: int
 
         $decoded = @json_decode( $Result, true );
         if( $decoded === null ) {
@@ -56,8 +66,11 @@ function retrieveStatus() {
                 }
             }
         }       
+
+    } catch( Exception $e ) {
+        $Image = BCKSPC_IMG_UNKNOWN;
     }
-    
+
     return array(
         'members' => $Members,
         'image'   => $Image
@@ -66,6 +79,7 @@ function retrieveStatus() {
 
 function getStatusArray() {
 
+    // Check if apc has a cached snippet for me, to reduce curl calls to API
     $APC = apc_fetch( BCKSPC_APC_NAME );
     if( $APC === false ) {
         $Result = retrieveStatus();
