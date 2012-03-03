@@ -91,13 +91,14 @@ def main():
             exit(1)
 
     # create database connection
-    dbcron = MySQLdb.connect ( host=cfg['mysql_host'], user=cfg['mysql_user'], passwd=cfg['mysql_pass'], db=cfg['mysql_name'] )
+    dbcron = MySQLdb.connect ( host=cfg['mysql_host'], user=cfg['mysql_user'], passwd=cfg['mysql_pass'], db=cfg['mysql_name'], cursorclass=MySQLdb.cursors.SSDictCursor )
+    dbcron2 = MySQLdb.connect ( host=cfg['mysql_host'], user=cfg['mysql_user'], passwd=cfg['mysql_pass'], db=cfg['mysql_name'], cursorclass=MySQLdb.cursors.SSDictCursor )
 
     dbcursor = dbcron.cursor()
 
     dbcursor.execute('SELECT nickname FROM mac_to_nick GROUP by nickname')
     for entry in dbcursor:
-        calculateTime( entry['nickname'], dbcron );
+        calculateTime( entry['nickname'], dbcron2 );
 
     dbcursor.close()
     dbcron.close()
