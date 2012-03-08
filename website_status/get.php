@@ -3,7 +3,7 @@
 
 define('BCKSPC_URL',            'http://status.bckspc.de/status.php?response=json' );
 
-define('BCKSPC_IMG_OPEN_MEMBER',    'status_open_members.png');
+define('BCKSPC_IMG_OPEN_MEMBERS',   'status_open_members.png');
 define('BCKSPC_IMG_OPEN_EVERYONE',  'status_open_everyone.png');
 define('BCKSPC_IMG_CLOSED',         'status_closed.png');
 define('BCKSPC_IMG_UNKNOWN',        'status_unknown.png');
