@@ -3,9 +3,10 @@
 
 define('BCKSPC_URL',            'http://status.bckspc.de/status.php?response=json' );
 
-define('BCKSPC_IMG_OPEN',       'status_open.png');
-define('BCKSPC_IMG_CLOSED',     'status_closed.png');
-define('BCKSPC_IMG_UNKNOWN',    'status_unknown.png');
+define('BCKSPC_IMG_OPEN_MEMBER',    'status_open_members.png');
+define('BCKSPC_IMG_OPEN_EVERYONE',  'status_open_everyone.png');
+define('BCKSPC_IMG_CLOSED',         'status_closed.png');
+define('BCKSPC_IMG_UNKNOWN',        'status_unknown.png');
 
 define('BCKSPC_APC_NAME',       'bckspc_status_cache');
 define('BCKSPC_APC_TIME',       300 );
@@ -62,7 +63,13 @@ function retrieveStatus() {
                 if( $Members == 0 ) {
                     $Image = BCKSPC_IMG_CLOSED;
                 } else  {
-                    $Image = BCKSPC_IMG_OPEN;
+
+                    // If day == tuesday, we have our open tuesday
+                    if( date('N') == 2 ) {
+                        $Image = BCKSPC_IMG_OPEN_EVERYONE;
+                    } else {
+                        $Image = BCKSPC_IMG_OPEN_MEMBERS;
+                    }
                 }
             }
         }       
