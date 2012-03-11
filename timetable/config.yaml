@@ -1,0 +1,4 @@
+mysql_host: 'localhost'
+mysql_user: 'cronjob'
+mysql_pass: 'yourpw'
+mysql_name: 'cronjob'
