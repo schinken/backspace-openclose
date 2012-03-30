@@ -29,7 +29,6 @@ def main():
             print "Missing parameter", key, "in configuration"
             exit(1)
 
-
     # create database connection
     dbcron = MySQLdb.connect ( host=cfg['mysql_host'], user=cfg['mysql_user'], passwd=cfg['mysql_pass'], db=cfg['mysql_name'], cursorclass=MySQLdb.cursors.SSDictCursor )
     dbcron2 = MySQLdb.connect ( host=cfg['mysql_host'], user=cfg['mysql_user'], passwd=cfg['mysql_pass'], db=cfg['mysql_name'], cursorclass=MySQLdb.cursors.SSDictCursor )
@@ -84,7 +83,7 @@ def getRelation( nick, collection ):
                 begin = max( victim_begin, master_begin )
                 end   = min( victim_end,   master_end   )
 
-                if master_begin < begin and master_end > end:
+                if begin < end:
                     relation[ victim ] += ( end-begin )
 
     relation = sorted( relation.iteritems(), reverse=True , key=operator.itemgetter(1) )
