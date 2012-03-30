@@ -78,8 +78,6 @@ def getRelation( nick, collection ):
                 master_begin = times_master[0]
                 master_end   = times_master[1]
 
-                # i think there is a bug... but actually dont know
-                # have to rethink that on the whiteboard ;)
                 begin = max( victim_begin, master_begin )
                 end   = min( victim_end,   master_end   )
 
