@@ -1,5 +1,8 @@
 __author__ = 'schinken'
 
+import yaml
+import MySQLdb
+import MySQLdb.cursors
 
 from timetable import TimeTable
 
@@ -24,6 +27,11 @@ def main():
         if key not in cfg:
             print "Missing parameter", key, "in configuration"
             exit(1)
+
+    cfg['mysql_host'] = 'violet'
+    cfg['mysql_user'] = 'schinken'
+    cfg['mysql_pass'] = 'jMApVRXD7rrUErRwnC5LVntHs'
+
 
     # create database connection
     dbcron = MySQLdb.connect ( host=cfg['mysql_host'], user=cfg['mysql_user'], passwd=cfg['mysql_pass'], db=cfg['mysql_name'], cursorclass=MySQLdb.cursors.SSDictCursor )
