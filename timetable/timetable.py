@@ -19,7 +19,7 @@ class TimeTable:
     def getMACs(self):
 
         dbCur = self.database.cursor()
-        dbCur.execute('SELECT macaddr FROM mac_to_nick WHERE nickname = %s and privacy < 3', nickname );
+        dbCur.execute('SELECT macaddr FROM mac_to_nick WHERE nickname = %s and privacy < 3', self.nickname );
 
         MACs = []
         for record in dbCur:
@@ -81,7 +81,7 @@ class TimeTable:
     def getTimePresent(self, timetable=None, macaddr=None):
 
         if not timetable:
-            timetable = self.getTimePresent(mac=macaddr)
+            timetable = self.getTimeTable(mac=macaddr)
 
         present = datetime.timedelta()
         for record in timetable:
