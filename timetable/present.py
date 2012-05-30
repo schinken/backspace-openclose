@@ -28,11 +28,6 @@ def main():
             print "Missing parameter", key, "in configuration"
             exit(1)
 
-    cfg['mysql_host'] = 'violet'
-    cfg['mysql_user'] = 'schinken'
-    cfg['mysql_pass'] = 'jMApVRXD7rrUErRwnC5LVntHs'
-
-
     # create database connection
     dbcron = MySQLdb.connect ( host=cfg['mysql_host'], user=cfg['mysql_user'], passwd=cfg['mysql_pass'], db=cfg['mysql_name'], cursorclass=MySQLdb.cursors.SSDictCursor )
     dbcron2 = MySQLdb.connect ( host=cfg['mysql_host'], user=cfg['mysql_user'], passwd=cfg['mysql_pass'], db=cfg['mysql_name'], cursorclass=MySQLdb.cursors.SSDictCursor )
