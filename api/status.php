@@ -2,7 +2,7 @@
 
 include('hosts_alive_sql.php');
 
-$usage = "Use: " . $_SERVER['PHP_SELF'] . "?response=[json|xml|img]";
+$usage = "Use: " . $_SERVER['PHP_SELF'] . "?response=[json|xml|img|ascii]";
 
 if (!$_GET['response'])
 	exit($usage);
@@ -28,11 +28,21 @@ function get_hosts_alive($con, $query, $db){
 }
 
 $hosts = array(	
-		'all' => get_hosts_alive($con, $hostQueries['all'], $db),
-		'members' => get_hosts_alive($con, $hostQueries['members'], $db),
-		'member_devices' => get_hosts_alive($con, $hostQueries['member_devices'], $db),
-		'unknown_devices' => get_hosts_alive($con, $hostQueries['unknown'], $db)
+		'all' => (int) get_hosts_alive($con, $hostQueries['all'], $db),
+		'members' => (int) get_hosts_alive($con, $hostQueries['members'], $db),
+		'member_devices' => (int) get_hosts_alive($con, $hostQueries['member_devices'], $db),
+		'unknown_devices' => (int) get_hosts_alive($con, $hostQueries['unknown'], $db)
 	      );
+
+$usr_qry = "select nickname FROM ( SELECT nickname from alive_hosts as t1 INNER JOIN mac_to_nick as t2 ON t1.macaddr = t2.macaddr AND t2.privacy = 0 WHERE erfda > NOW() - INTERVAL 20 MINUTE GROUP by nickname) as ghoti";
+$result = mysql_query($usr_qry, $con);
+
+$users = array();
+while( $f = mysql_fetch_assoc($result) ) {
+    $users[] = array(
+        'nickname'  => $f['nickname'] 
+    );
+}
 
 
 switch($get){
@@ -50,7 +60,13 @@ switch($get){
 
 	case "json":
 		header('Content-type: application/json');
+        $hosts['members_present'] = $users;
 		echo json_encode($hosts);
+		break;
+
+	case "ascii":
+		header('Content-type: text/html');
+		echo "members: " . $hosts['members'];
 		break;
 
 	case "xml":
@@ -61,6 +77,13 @@ switch($get){
 		echo '<members>' . $hosts['members'] . '</members>';
 		echo '<member_devices>' . $hosts['member_devices'] . '</member_devices>';
 		echo '<unknown_devices>' . $hosts['unknown_devices'] . '</unknown_devices>';
+        echo '<members_present>';
+        foreach( $users as $user ) {
+            echo '<member>';
+                echo '<nickname>'.$user['nickname'].'</nickname>';
+            echo '</member>';
+        }
+        echo '</members_present>';
 		echo '</xmlresponse>';
 		break;
 
