@@ -33,7 +33,11 @@ $hosts = array(
     'unknown_devices'   => (int) get_hosts_alive($con, $hostQueries['unknown'])
 );
 
-$usr_qry = "select nickname FROM ( SELECT nickname from alive_hosts as t1 INNER JOIN mac_to_nick as t2 ON t1.macaddr = t2.macaddr AND t2.privacy = 0 WHERE erfda > NOW() - INTERVAL 20 MINUTE GROUP by nickname) as ghoti";
+// Retrieve current present members with privacy 0 and 1
+// 0 = show member and device
+// 1 = show member
+
+$usr_qry = "select nickname FROM ( SELECT nickname from alive_hosts as t1 INNER JOIN mac_to_nick as t2 ON t1.macaddr = t2.macaddr AND t2.privacy IN(0,1) WHERE erfda > NOW() - INTERVAL 20 MINUTE GROUP by nickname) as ghoti";
 $result = mysql_query($usr_qry, $con);
 
 $users = array();
