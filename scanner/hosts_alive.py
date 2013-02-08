@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-
 import commands
 import re
 
@@ -8,14 +7,11 @@ import MySQLdb
 import MySQLdb.cursors
 
 import iptools
-import yaml
+import settings
+import sys
 
-# starting connection to database
 
-configFile = 'config.yaml'
-network = '10.1.30.0/24'
-
-def runNmap( network ):
+def run_nmap(network):
 
     cmd = 'nmap -sP -n ' + network
    
@@ -28,19 +24,19 @@ def runNmap( network ):
     return output
 
 
-def getHosts( output ):
+def get_hosts(network):
 
+    output = run_nmap(network)
     hosts = []
 
     # parse all mac and ip combinations from string
-    matches = re.findall(r'Host\s+((?:\d{1,3}\.){3}\d{1,3}).*?MAC Address:\s+((?:[0-9A-F]{2}\:){5}[0-9A-F]{2})', output, re.M | re.S )
+    matches = re.findall(r'Host\s+((?:\d{1,3}\.){3}\d{1,3}).*?MAC Address:\s+((?:[0-9A-F]{2}\:){5}[0-9A-F]{2})', output, re.M | re.S)
     for match in matches:
-        hosts.append({ 'ip': match[0], 'mac': match[1] })
+        hosts.append({'ip': match[0], 'mac': match[1]})
 
     return hosts
 
-def writeHosts( hosts, db ):
-
+def write_hosts( hosts, db ):
 
     dbcursor = db.cursor()
 
@@ -53,35 +49,17 @@ def writeHosts( hosts, db ):
 
 def main():
 
-    # try to open yaml config file
-    strConfig = open( configFile )
-    if not strConfig:
-        print "Error reading configfile", configFile
-        exit(1)
-
-    # try to parse yaml config string
-    cfg = yaml.load( strConfig )
-    if not cfg:
-        print "Error parsing yaml config file"
-        exit(1)
-
-    # check if all required config keys are available
-    for key in ['mysql_host', 'mysql_user', 'mysql_pass', 'mysql_name']:
-        if key not in cfg:
-            print "Missing parameter", key, "in configuration"
-            exit(1)
-
     # create database connection
-    dbcron = MySQLdb.connect ( host=cfg['mysql_host'], user=cfg['mysql_user'], passwd=cfg['mysql_pass'], db=cfg['mysql_name'] )
-
-    # retrieve data from network
-    result = runNmap( network )
+    dbcron = MySQLdb.connect (  host=settings.mysql_host,
+                                user=settings.mysql_user,
+                                passwd=settings.mysql_pass,
+                                db=settings.mysql_name )
 
     # parse host string, returned from nmap
-    hosts  = getHosts( result )
+    hosts  = get_hosts(settings.network)
 
     # write hosts to database
-    writeHosts( hosts, dbcron )
+    write_hosts(hosts, dbcron)
 
     # close database connection
     dbcron.close()
