@@ -30,7 +30,7 @@ def get_hosts(network):
     hosts = []
 
     # parse all mac and ip combinations from string
-    matches = re.findall(r'Host\s+((?:\d{1,3}\.){3}\d{1,3}).*?MAC Address:\s+((?:[0-9A-F]{2}\:){5}[0-9A-F]{2})', output, re.M | re.S)
+    matches = re.findall(r'scan report for\s+((?:\d{1,3}\.){3}\d{1,3}).*?MAC Address:\s+((?:[0-9A-F]{2}\:){5}[0-9A-F]{2})', output, re.M | re.S)
     for match in matches:
         hosts.append({'ip': match[0], 'mac': match[1]})
 
