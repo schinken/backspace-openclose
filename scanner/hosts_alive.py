@@ -62,6 +62,7 @@ def main():
     write_hosts(hosts, dbcron)
 
     # close database connection
+    dbcron.commit()
     dbcron.close()
 
 if __name__ == "__main__":
