@@ -36,24 +36,24 @@ def get_hosts(network):
 
     return hosts
 
-def write_hosts( hosts, db ):
+def write_hosts(hosts, db):
 
     dbcursor = db.cursor()
 
     # add ALL THE HOSTS to the database
     for host in hosts:
-        longip = iptools.ip2long( host['ip'] ) 
-        dbcursor.execute( "INSERT INTO alive_hosts (macaddr, iplong, erfda ) VALUES ( '%s', %d, NOW() )" % ( host['mac'].lower() , longip ) )
+        longip = iptools.ip2long(host['ip']) 
+        dbcursor.execute("INSERT INTO alive_hosts (macaddr, iplong, erfda) VALUES ('%s', %d, NOW())" % (host['mac'].lower() , longip))
 
     dbcursor.close()
 
 def main():
 
     # create database connection
-    dbcron = MySQLdb.connect (  host=settings.mysql_host,
-                                user=settings.mysql_user,
-                                passwd=settings.mysql_pass,
-                                db=settings.mysql_name )
+    dbcron = MySQLdb.connect(host=settings.mysql_host,
+                             user=settings.mysql_user,
+                             passwd=settings.mysql_pass,
+                             db=settings.mysql_name)
 
     # parse host string, returned from nmap
     hosts  = get_hosts(settings.network)
