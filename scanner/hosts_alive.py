@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from collector import ubiquiti, arp, nmap
+from iptools.ipv4 import ip2long
 
 import MySQLdb
 import MySQLdb.cursors
@@ -56,7 +57,7 @@ def main():
 
     # add ALL THE HOSTS to the database
     for ip,mac in hosts.iteritems():
-        longip = iptools.ip2long(ip) 
+        longip = ip2long(ip) 
         dbcursor.execute("INSERT INTO alive_hosts (macaddr, iplong, erfda) VALUES ('%s', %d, NOW())" % (mac.lower() , longip))
 
     dbcursor.close()
