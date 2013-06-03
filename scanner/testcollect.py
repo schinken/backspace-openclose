@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     hosts = {}
     for collector in collectors:
-        hosts = hosts + collector.get_hosts()
+        hosts = dict(hosts.items() + collector.get_hosts().items())
 
     print hosts
 
