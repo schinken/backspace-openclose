@@ -5,7 +5,7 @@ import threading
 
 from collections import defaultdict
 
-class NmapCollector(threading.Thread):
+class Collector(threading.Thread):
 
     hosts = {}
 
@@ -42,7 +42,7 @@ class NmapCollector(threading.Thread):
 
 if __name__ == '__main__':
 
-    tst = NmapCollector('10.1.20.100-250')
+    tst = Collector('10.1.20.100-250')
     tst.start()
 
     tst.join()

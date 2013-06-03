@@ -6,7 +6,7 @@ from unifi.controller import Controller
 from iptools.ipv4 import ip2long
 from collections import defaultdict
 
-class UbiquitiCollector(threading.Thread):
+class Collector(threading.Thread):
 
     hosts = {}
 
@@ -54,7 +54,7 @@ class UbiquitiCollector(threading.Thread):
 
 if __name__ == '__main__':
 
-    tst = UbiquitiCollector('10.1.20.100-250', '10.1.20.5', 'root', 'xxxx')
+    tst = Collector('10.1.20.100-250', '10.1.20.5', 'root', 'xxxx')
     tst.start()
 
     tst.join()

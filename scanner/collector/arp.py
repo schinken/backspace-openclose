@@ -6,7 +6,7 @@ import threading
 from iptools.ipv4 import ip2long
 from collections import defaultdict
 
-class ArpCollector(threading.Thread):
+class Collector(threading.Thread):
 
     hosts = {}
 
@@ -63,7 +63,7 @@ class ArpCollector(threading.Thread):
 
 if __name__ == '__main__':
 
-    tst = ArpCollector('10.1.20.100-250')
+    tst = Collector('10.1.20.100-250')
     tst.start()
 
     tst.join()
