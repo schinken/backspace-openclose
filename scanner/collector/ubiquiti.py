@@ -35,19 +35,27 @@ class Collector(threading.Thread):
         ipl_begin = ip2long(self.ip_begin)
         ipl_end = ip2long(self.ip_end)
 
-        c = Controller(self.controller, self.username, self.password)
+        try:
+            c = Controller(self.controller, self.username, self.password)
 
-        for client in c.get_clients():
+            for client in c.get_clients():
 
-            ip = client.get('ip', False)
-            if not ip:
-                continue
+                ip = client.get('ip', False)
+                if not ip:
+                    continue
 
-            ipl_cur = ip2long(ip)
-            if ipl_cur >= ipl_begin and ipl_cur <= ipl_end:
-                hosts[ip] = client['mac'].lower()
+                ipl_cur = ip2long(ip)
+                if ipl_cur >= ipl_begin and ipl_cur <= ipl_end:
+                    hosts[ip] = client['mac'].lower()
 
-        self.hosts = hosts
+            self.hosts = hosts
+
+        except:
+            # somethimes a weird SSL Handshake errors appears in combination
+            # with the ubiquiti tomcat server.
+            #
+            # see: http://stackoverflow.com/questions/14167508/intermittent-sslv3-alert-handshake-failure-under-python
+            return False
 
     def get_hosts(self):
         return self.hosts
