@@ -32,7 +32,7 @@ class Collector(threading.Thread):
         # we dont use the status code here, because fping returns strange
         # values.
         (status, output) = commands.getstatusoutput(cmd)
-        (status, output) = commands.getstatusoutput(settings.arp + '-a')
+        (status, output) = commands.getstatusoutput(settings.arp + ' -a')
 
         if status:
             sys.stderr.write('Error running command "arp -a"')
