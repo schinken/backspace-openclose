@@ -38,12 +38,8 @@ def main():
     for collector in collectors:
         collector.join()
 
-    # results
-    print "The results are in!"
-
     hosts = {}
     for collector in collectors:
-        print collector.get_hosts()
         hosts = dict(hosts.items() + collector.get_hosts().items())
 
     # create database connection

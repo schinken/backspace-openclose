@@ -59,12 +59,3 @@ class Collector(threading.Thread):
 
     def get_hosts(self):
         return self.hosts
-
-if __name__ == '__main__':
-
-    tst = Collector('10.1.20.100-250', '10.1.20.5', 'root', 'xxxx')
-    tst.start()
-
-    tst.join()
-
-    print tst.get_hosts()
