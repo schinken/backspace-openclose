@@ -7,4 +7,8 @@ mysql_name = 'databasename'
 # misc settings
 network = '10.1.30.0/24'
 
+fping = '/usr/sbin/fping'
+arp = '/sbin/arp'
+
+
 filtered_macs = []

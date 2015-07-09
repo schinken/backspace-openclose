@@ -1,5 +1,6 @@
 import sys
 import re
+import settings
 import commands
 import threading
 
@@ -26,14 +27,12 @@ class Collector(threading.Thread):
 
     def run(self):
 
-        cmd = '/usr/bin/fping -a -q -g %s %s 2> /dev/null' % (self.ip_begin,
-                self.ip_end) 
+        cmd = settings.fping + ' -a -q -g %s %s 2> /dev/null' % (self.ip_begin, self.ip_end) 
 
         # we dont use the status code here, because fping returns strange
         # values.
         (status, output) = commands.getstatusoutput(cmd)
-
-        (status, output) = commands.getstatusoutput('arp -a')
+        (status, output) = commands.getstatusoutput(settings.arp + '-a')
 
         if status:
             sys.stderr.write('Error running command "arp -a"')
