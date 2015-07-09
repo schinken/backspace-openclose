@@ -62,6 +62,12 @@ def main():
 
     dbcursor.close()
 
+    # delete everything with higher privacy than 3
+    dbcursor = dbcron.cursor()
+    dbcursor.execute("DELETE FROM alive_hosts WHERE EXISTS(SELECT 1 FROM mac_to_nick as t2 WHERE t2.privacy > 3 AND t2.macaddr = alive_hosts.macaddr LIMIT 1)")
+    dbcursor.close()
+
+
     # close database connection
     dbcron.commit()
     dbcron.close()
