@@ -6,3 +6,5 @@ mysql_name = 'databasename'
 
 # misc settings
 network = '10.1.30.0/24'
+
+filtered_macs = []
